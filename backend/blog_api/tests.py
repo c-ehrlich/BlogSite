@@ -33,8 +33,10 @@ class PostTests(APITestCase):
 
     def test_post_update(self):
         """
-        Ensure that posts can not be edited by a user who is neither the author
-        nor a superuser
+        Ensure that 
+        1. posts can be edited by their author even if that user
+        is not a superuser
+        2. posts can not be edited by non-superusers who are not the author
         """
         client = APIClient()
 
@@ -77,15 +79,33 @@ class PostTests(APITestCase):
         )
 
         # a good tool for debugging tests
-        print(response.data)
+        # print(response.data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         edited_post = Post.postobjects.get(id=1)
         self.assertEqual(edited_post.title, "New")
 
-    # TODO a similar test that gets an error because a user is trying to edit
-    # a post that's not their own
+        # Log in again, this time as a user who is trying to edit a post that's
+        # not theirs
+        client.logout()
+        client.login(username=self.testuser2.username, password="123456789")
+        url=reverse(("blog_api:detailcreate"), kwargs={"pk": 1})
+        response = client.put(
+            url,
+            {
+                # id not required because it's in the URL
+                "title": "New 2",
+                "author": 1,
+                "excerpt": "New 2",
+                "content": "New 2",
+                "status": "published",
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        not_edited_post = Post.postobjects.get(id=1)
+        self.assertEqual(not_edited_post.title, "New")
 
     # TODO a test where we try to make a post without being logged into an account
 
@@ -96,3 +116,5 @@ class PostTests(APITestCase):
     # that's too long, either in Post Creation or in Post Editing
 
     # TODO confirm that a superuser can edit someone else's post (is this true)
+
+    # TODO rewrite tests so we don't need to login a bunch of times
