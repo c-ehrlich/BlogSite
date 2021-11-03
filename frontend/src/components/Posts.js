@@ -5,6 +5,7 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  Link,
   Typography,
   Container,
 } from "@material-ui/core";
@@ -49,11 +50,13 @@ const Posts = (props) => {
               // Enterprise card is full width at sm breakpoint
               <Grid item key={post.id} xs={12} md={4}>
                 <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
-                    title="Image title"
-                  />
+                  <Link color="textPrimary" href={'post/' + post.slug} className={classes.link}>
+                    <CardMedia
+                      className={classes.cardMedia}
+                      image="https://source.unsplash.com/random"
+                      title="Image title"
+                    />
+                  </Link>
                   <CardContent className={classes.cardContent}>
                     <Typography
                       gutterBottom

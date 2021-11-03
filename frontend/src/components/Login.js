@@ -53,6 +53,12 @@ const Login = () => {
   };
 
   const handleSubmit = (e) => {
+    /*
+    * TODO: there's no error handling here
+    * for example if the password is incorrect, the site should probably
+    * tell the user about that?
+    * but that's a backend thing...
+    */
     e.preventDefault();
     console.log(formData);
 
