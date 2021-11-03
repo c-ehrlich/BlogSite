@@ -143,6 +143,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://127.0.0.1:8000",
 ]
 
 # Custom user model
@@ -151,8 +152,8 @@ AUTH_USER_MODEL = "users.NewUser"  # TODO change this name, it's awful
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,  # when someone requests a refresh token, a new access token is also generated
-    'BLACKLIST_AFTER_ROTATION': False,  # TODO this is set to True by default in the tutorial!
+    'ROTATE_REFRESH_TOKENS': True,  # when someone requests a refresh token, a new access token is also generated
+    'BLACKLIST_AFTER_ROTATION': True,  # TODO this is set to True by default in the tutorial!
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
@@ -163,7 +164,7 @@ SIMPLE_JWT = {
     'JWK_URL': None,
     'LEEWAY': 0,
 
-    'AUTH_HEADER_TYPES': ('Bearer', 'JWT'),
+    'AUTH_HEADER_TYPES': ('JWT'),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',

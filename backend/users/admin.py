@@ -10,19 +10,19 @@ class UserAdminConfig(UserAdmin):
     model = NewUser
     search_fields = (
         "email",
-        "user_name",
+        "username",
         "first_name",
     )
-    list_filter = ("email", "user_name", "first_name", "is_active", "is_staff")
+    list_filter = ("email", "username", "first_name", "is_active", "is_staff")
     ordering = ("-start_date",)
-    list_display = ("email", "id", "user_name", "first_name", "is_active", "is_staff")
+    list_display = ("email", "id", "username", "first_name", "is_active", "is_staff")
     fieldsets = (
         (
             None,
             {
                 "fields": (
                     "email",
-                    "user_name",
+                    "username",
                     "first_name",
                 )
             },
@@ -39,7 +39,7 @@ class UserAdminConfig(UserAdmin):
             "classes": ("wide",),
             "fields": (
                 "email",
-                "user_name",
+                "username",
                 "first_name",
                 "password1",
                 "password2",

@@ -3,7 +3,9 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from blog.models import Post, Category
-from django.contrib.auth.models import User
+
+# from django.contrib.auth.models import User
+from users.models import NewUser
 
 
 class PostTests(APITestCase):
@@ -20,11 +22,14 @@ class PostTests(APITestCase):
         Ensure we can create a new Post object and view objects
         """
         self.test_category = Category.objects.create(name="django")
-        self.testuser1 = User.objects.create_user(
-            username="test_user1", password="12345678"
+        self.testuser1 = NewUser.objects.create_user(
+            email="test1@test1.com",
+            password="12345678",
+            username="test_user1",
+            first_name="test1",
         )
 
-        self.client.login(username=self.testuser.username, password="12345678")
+        self.client.login(email=self.testuser1.email, password="12345678")
 
         data = {"title": "new", "author": 1, "excerpt": "new", "content": "new"}
         url = reverse("blog_api:listcreate")
@@ -33,7 +38,7 @@ class PostTests(APITestCase):
 
     def test_post_update(self):
         """
-        Ensure that 
+        Ensure that
         1. posts can be edited by their author even if that user
         is not a superuser
         2. posts can not be edited by non-superusers who are not the author
@@ -43,11 +48,17 @@ class PostTests(APITestCase):
         # there's probably a better way of doing this than to create new data
         # for every test
         self.test_category = Category.objects.create(name="django")
-        self.testuser1 = User.objects.create_user(
-            username="test_user1", password="123456789"
+        self.testuser1 = NewUser.objects.create_user(
+            email="test1@email.com",
+            password="123456789",
+            username="test_user1",
+            first_name="test1",
         )
-        self.testuser2 = User.objects.create_user(
-            username="test_user2", password="123456789"
+        self.testuser2 = NewUser.objects.create_user(
+            email="test2@email.com",
+            password="123456789",
+            username="test_user2",
+            first_name="test2",
         )
         test_post = Post.objects.create(
             category_id=1,
@@ -90,7 +101,7 @@ class PostTests(APITestCase):
         # not theirs
         client.logout()
         client.login(username=self.testuser2.username, password="123456789")
-        url=reverse(("blog_api:detailcreate"), kwargs={"pk": 1})
+        url = reverse(("blog_api:detailcreate"), kwargs={"pk": 1})
         response = client.put(
             url,
             {
