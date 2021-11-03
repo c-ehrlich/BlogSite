@@ -25,19 +25,32 @@ class PostUserWritePermission(BasePermission):
         return obj.author == request.user  # is the person trying to edit the author?
 
 
-class PostList(viewsets.ViewSet):
-    # permission_classes = [IsAuthenticated]
-    permission_classes = [AllowAny]
-    queryset = Post.postobjects.all()
+class PostList(viewsets.ModelViewSet):
+    permission_classes = [PostUserWritePermission]
+    serializer_class = PostSerializer
+    # queryset = Post.postobjects.all()
 
-    def list(self, request):
-        serializer = PostSerializer(self.queryset, many=True)
-        return Response(serializer.data)
+    def get_object(self, queryset=None, **kwargs):
+        item = self.kwargs.get("pk")
+        return get_object_or_404(Post, title=item)
 
-    def retrieve(self, request, pk=None):
-        post = get_object_or_404(self.queryset, pk=pk)
-        serializer = PostSerializer(post)
-        return Response(serializer.data)
+    # Define Custom Queryset
+    def get_queryset(self):
+        return Post.objects.all()
+
+
+# class PostList(viewsets.ViewSet):
+#     permission_classes = [AllowAny]
+#     queryset = Post.postobjects.all()
+
+#     def list(self, request):
+#         serializer_class = PostSerializer(self.queryset, many=True)
+#         return Response(serializer_class.data)
+
+#     def retrieve(self, request, pk=None):
+#         post = get_object_or_404(self.queryset, pk=pk)
+#         serializer_class = PostSerializer(post)
+#         return Response(serializer_class.data)
 
 
 # viewsets.ViewSet methods
@@ -50,6 +63,7 @@ class PostList(viewsets.ViewSet):
 
 
 # class PostList(generics.ListCreateAPIView):
+#     # TODO this currently means only admin users can create posts. do we want that?
 #     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 #     queryset = Post.postobjects.all()
 #     serializer_class = PostSerializer
