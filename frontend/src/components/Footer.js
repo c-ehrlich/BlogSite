@@ -4,6 +4,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Grid, Link, Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
+  '@global': {
+    ul: {
+      margin: 0,
+      padding: 0,
+      listStyle: 'none',
+    },
+  },
   footer: {
     borderTop: `1px solid ${theme.palette.divider}`,
     marginTop: theme.spacing(8),
@@ -21,7 +28,7 @@ const Copyright = () => {
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright (c) "}
       <Link color="inherit" href="https://material-ui.com/">
-        TKTK
+        CE TEST
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -64,7 +71,7 @@ const Footer = () => {
   return (
     <>
     <Container maxWidth="md" component="footer" className={classes.footer}>
-      <Grid container spacing={4} justify="space-evenly">
+      <Grid container spacing={4} justifyContent="space-evenly">
         {footers.map((footer) => (
           <Grid item xs={6} sm={3} key={footer.title}>
             <Typography variant="h6" color="textPrimary" gutterBottom>
@@ -82,6 +89,9 @@ const Footer = () => {
           </Grid>
         ))}
       </Grid>
+      <Box mt={5}>
+        <Copyright />
+      </Box>
     </Container>
     </>
   )
