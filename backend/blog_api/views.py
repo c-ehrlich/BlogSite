@@ -36,6 +36,8 @@ class PostList(viewsets.ModelViewSet):
 
     # Define Custom Queryset
     def get_queryset(self):
+        user = self.request.user
+        print(user)
         return Post.objects.all()
 
 
